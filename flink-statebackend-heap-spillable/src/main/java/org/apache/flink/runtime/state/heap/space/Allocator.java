@@ -22,6 +22,7 @@ import java.io.Closeable;
 
 /**
  * Implementations are responsible for allocate space.
+ * 用来分配空间
  */
 public interface Allocator extends Closeable {
 

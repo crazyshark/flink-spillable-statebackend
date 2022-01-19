@@ -24,6 +24,7 @@ import org.apache.flink.util.Preconditions;
 /**
  * A bucket is a continuous space that is divided into blocks with fixed size.
  * Buckets can be reused to allocate another size of blocks after it's freed.
+ * bucket是一个连续的空间，被分成固定大小的块。bucket在被释放后可以重新分配另一个大小的块。
  */
 public final class Bucket {
 

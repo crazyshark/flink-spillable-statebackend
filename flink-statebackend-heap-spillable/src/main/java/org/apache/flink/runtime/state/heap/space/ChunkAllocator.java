@@ -22,12 +22,13 @@ import java.io.Closeable;
 
 /**
  * Allocator to create chunks.
+ * 用来分配创建chunks
  */
 public interface ChunkAllocator extends Closeable {
 
 	/**
 	 * Creates a chunk with the id and strategy.
-	 *
+	 * 使用制定的id和策略创建chunk
 	 * @param chunkId id of the chunk.
 	 * @param allocateStrategy strategy to allocate chunk.
 	 * @return a chunk.

@@ -28,6 +28,7 @@ import static org.apache.flink.runtime.state.heap.space.SpaceConstants.NO_SPACE;
 
 /**
  * Allocates blocks with fixed size from {@link Bucket}.
+ * 从 {@link Bucket} 分配固定大小的block
  */
 final class BlockAllocator {
 

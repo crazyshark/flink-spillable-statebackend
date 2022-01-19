@@ -20,16 +20,19 @@ package org.apache.flink.runtime.state.heap.space;
 
 /**
  * The strategy for space allocation.
+ * 分配空间的策略
  */
 public enum AllocateStrategy {
 
 	/**
 	 * This strategy implements a simple buddy-like allocator used for small space.
+	 * 该策略实现了一个简单的类似伙伴的分配器，用于小空间。
 	 */
 	SmallBucket,
 
 	/**
 	 * This strategy is used to allocate large space, and reduce fragments.
+	 * 该策略用于分配大空间，并减少碎片。
 	 */
 	HugeBucket
 }

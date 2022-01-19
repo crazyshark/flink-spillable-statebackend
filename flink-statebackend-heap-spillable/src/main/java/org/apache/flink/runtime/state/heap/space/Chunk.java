@@ -22,9 +22,11 @@ import org.apache.flink.core.memory.MemorySegment;
 
 /**
  * Chunk is a logically contiguous space backed by one or multiple {@link MemorySegment}.
+ * Chunk是由一个或多个 {@link MemorySegment} 支持的逻辑连续空间。
  * <p/>
  * The backing MemorySegment may wrap an on-heap byte array, an off-heap {@link java.nio.DirectByteBuffer},
  * or a {@link java.nio.MappedByteBuffer} from a memory-mapped file.
+ * 后备 MemorySegment 可以包装一个堆上字节数组、一个堆外 {@link java.nio.DirectByteBuffer} 或一个来自内存映射文件的 {@link java.nio.MappedByteBuffer}。
  */
 public interface Chunk {
 	/**
@@ -51,6 +53,7 @@ public interface Chunk {
 
 	/**
 	 * Returns the backed {@link MemorySegment} for the space with the offset.
+	 * 返回offset对应的底层MemorySegment
 	 *
 	 * @param offsetInChunk offset of space in the chunk.
 	 * @return memory segment backed the space.
@@ -59,6 +62,7 @@ public interface Chunk {
 
 	/**
 	 * Returns the offset of the space in the backed {@link MemorySegment}.
+	 * 返回支持的 {@link MemorySegment} 中空间的偏移量。
 	 *
 	 * @param offsetInChunk offset of space in the chunk.
 	 * @return offset of space in the memory segment.

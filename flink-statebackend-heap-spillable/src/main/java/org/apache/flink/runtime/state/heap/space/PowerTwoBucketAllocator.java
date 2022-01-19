@@ -28,11 +28,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * This is a simple buddy-like allocator used for small space. The allocator always allocates a block
  * of power-of-two size to satisfy a space request. For example, if a space of 54 bytes is requested,
  * allocator will allocate a block of 64 bytes to it which leads to a waste of 10 bytes.
+ * 这是一个简单的类似伙伴的分配器，用于小空间。 分配器总是分配一个大小为 2 的块以满足空间请求。
+ * 例如，如果请求一个 54 字节的空间，分配器将为其分配一个 64 字节的块，这会导致 10 字节的浪费。
  *
  * <p>A {@link Chunk} will be divided into multiple buckets of the same size. Each bucket is further
  * divided into blocks. Blocks in a bucket have the same size, but blocks in different buckets may have
  * different size. Size of each block must be a power of two, and the maximum size of block can't exceed
  * bucket size.
+ * <p>一个{@link Chunk}会被分成多个大小相同的桶。 每个桶进一步分为块。
+ * 一个桶中的块具有相同的大小，但不同桶中的块可能具有不同的大小。 每个块的大小必须是 2 的幂，并且块的最大大小不能超过桶大小。
  */
 public class PowerTwoBucketAllocator implements BucketAllocator {
 

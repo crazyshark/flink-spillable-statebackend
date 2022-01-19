@@ -21,11 +21,13 @@ package org.apache.flink.runtime.state.heap.space;
 /**
  * Bucket is a logic space in the chunk. Each Chunk has a
  * {@link BucketAllocator} to avoid space fragments.
+ * Bucket是chunk中的一个逻辑空间。 每个 Chunk 都有一个 {@link BucketAllocator} 以避免空间碎片。
  */
 public interface BucketAllocator {
 
 	/**
 	 * Allocate a space in a the chunk.
+	 * 在chunk中分配空间
 	 *
 	 * @param size size of space to allocate.
 	 * @return offset of allocated space in the chunk.
@@ -34,6 +36,7 @@ public interface BucketAllocator {
 
 	/**
 	 * Free a space with the given offset in the chunk.
+	 * 在chunk中释放指定offset的空间
 	 *
 	 * @param offset offset of space in the chunk.
 	 */

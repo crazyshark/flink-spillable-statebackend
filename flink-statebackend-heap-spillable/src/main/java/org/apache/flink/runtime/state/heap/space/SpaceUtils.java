@@ -23,11 +23,13 @@ import static org.apache.flink.runtime.state.heap.space.SpaceConstants.FOUR_BYTE
 
 /**
  * Utilities for space.
+ * 空间工具类
  */
 public class SpaceUtils {
 
 	/**
 	 * Returns the id of chunk used by the space with the given space.
+	 * 返回具有给定空间的空间使用的chunk ID。
 	 *
 	 * @param address address of the space.
 	 * @return id of chunk used by space.
@@ -38,7 +40,7 @@ public class SpaceUtils {
 
 	/**
 	 * Returns the offset of space in the chunk.
-	 *
+	 * 返回给定空间对应的chunk 的offset
 	 * @param address address of the space.
 	 * @return id of chunk used by space.
 	 */

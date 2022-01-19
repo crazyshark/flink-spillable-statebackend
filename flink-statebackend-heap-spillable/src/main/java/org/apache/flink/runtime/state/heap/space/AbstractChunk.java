@@ -22,6 +22,7 @@ import org.apache.flink.util.Preconditions;
 
 /**
  * Base implementation of {@link Chunk}.
+ * Chunk的基本实现
  */
 public abstract class AbstractChunk implements Chunk {
 
