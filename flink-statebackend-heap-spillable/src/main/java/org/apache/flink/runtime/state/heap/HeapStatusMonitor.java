@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Monitor memory usage and garbage collection.
+ * 监控内存使用和垃圾收集。
  */
 public class HeapStatusMonitor {
 
@@ -47,35 +48,42 @@ public class HeapStatusMonitor {
 	private static HeapStatusMonitor statusMonitor;
 
 	/** Interval to check memory usage. */
+	//堆内存检测周期
 	private final long checkIntervalInMs;
-
+	//JVM 自带的 MemoryMXBean 对象，可以从中获取当前的堆内存用量、堆内存最大值等
 	private final MemoryMXBean memoryMXBean;
-
+	//从上述 Bean 中获取的堆内存最大值，用来作为一个常量。
 	private final long maxMemory;
-
+	//JVM 自带的描述 GC 统计信息的 MXBean 对象列表（不止一个）。
 	private final List<GarbageCollectorMXBean> garbageCollectorMXBeans;
 
 	/** Generate ascending id for each monitor result. */
+	//为每次检测的结果生成一个自增的 ID。因为可能并发访问，这里需要使用 AtomicLong 对象。
 	private final AtomicLong resultIdGenerator;
 
 	/** Executor to check memory usage periodically. */
+	//创建一个周期执行器，并设置相关的取消策略。
 	private final ScheduledThreadPoolExecutor checkExecutor;
-
+	//向上述周期执行器提交一个周期为 checkIntervalInMs，会定时运行本类的 runCheck()方法，来检查堆内存的情况，并生成对应的 monitorResult。
 	private final ScheduledFuture checkFuture;
 
 	/** The latest monitor result. */
+	//描述单次的检测结果。MonitorResult 对象包含了当前时间戳、ID、堆内存用量、GC 时间等关键信息。当然，目前这些指标还是太少，生产环境还是需要更多决策项。
 	private volatile MonitorResult monitorResult;
 
 	/** Time for gc when last check. */
+	//上次 GC 的时间值
 	private long lastGcTime;
 
 	/** Number of gc when last check. */
+	//上次 GC 的统计数
 	private long lastGcCount;
 
 	/** Flag to signify that the monitor has been shut down already. */
 	private final AtomicBoolean isShutdown = new AtomicBoolean();
 
 	/** Shutdown hook to make sure that scheduler is closed. */
+	//Flink 里常见的用法，注册一个 JVM 的 shutdown hook，这样在进程关闭时，可以打印相关的日志，并设置 isShutdown 环境变量。
 	private final Thread shutdownHook;
 
 	HeapStatusMonitor(long checkIntervalInMs) {
@@ -102,6 +110,8 @@ public class HeapStatusMonitor {
 		LOG.info("Max memory {}, Check interval {}", maxMemory, checkIntervalInMs);
 	}
 
+	//定期将当前的堆内存用量，以及最近一次 GC 的平均时间保存在本实例的 monitorResult 对象中，
+	// 以备决策者读取。堆内存用量的获取非常直白，即直接获取 memoryMXBean 的 getHeapMemoryUsage() 方法即可
 	private void runCheck() {
 		long timestamp = System.currentTimeMillis();
 		long id = resultIdGenerator.getAndIncrement();
@@ -111,10 +121,15 @@ public class HeapStatusMonitor {
 		}
 	}
 
+	//这个方法用来获取最近 GC 的平均时间,通过一个 for 循环，遍历 garbageCollectorMXBeans 列表里的所有 GC 的 MXBean，
+	// 然后逐个读取当前的 GC 次数和时间，加到变量里。然后将得到的总次数和总时间，分别减去上次记录的值（lastGcCount 和 lastGcTime），
+	// 然后进行相除，就可以得到本次检测时的 GC 平均时间了。
 	private long getGarbageCollectionTime() {
 		long count = 0;
 		long timeMillis = 0;
+		//通过一个 for 循环，遍历 garbageCollectorMXBeans 列表里的所有 GC 的 MXBean
 		for (GarbageCollectorMXBean gcBean : garbageCollectorMXBeans) {
+			//然后逐个读取当前的 GC 次数和时间，加到变量里。然后将得到的总次数和总时间
 			long c = gcBean.getCollectionCount();
 			long t = gcBean.getCollectionTime();
 			count += c;
@@ -124,7 +139,7 @@ public class HeapStatusMonitor {
 		if (count == lastGcCount) {
 			return 0;
 		}
-
+		//分别减去上次记录的值（lastGcCount 和 lastGcTime）,然后进行相除，就可以得到本次检测时的 GC 平均时间了。
 		long gcCountIncrement = count - lastGcCount;
 		long averageGcTime = (timeMillis - lastGcTime) / gcCountIncrement;
 

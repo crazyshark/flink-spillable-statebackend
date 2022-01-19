@@ -20,11 +20,13 @@ package org.apache.flink.runtime.state.heap;
 
 /**
  * Interface for spill and load manager.
+ * 用来管理spill或者load STATE的接口
  */
 public interface SpillAndLoadManager {
 
 	/**
 	 * Check resource to decide whether to spill or load state.
+	 * 检查资源然后决定是否spill或者load state
 	 */
 	void checkResource();
 }

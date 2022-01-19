@@ -65,6 +65,7 @@ import java.util.UUID;
  * This state backend holds the working state in the memory (JVM heap) first, and will spill part of
  * states to disk when GC pressure grows higher. The state backend checkpoints state as files to a
  * file system (hence the backend's name).
+ * 此状态后端首先将工作状态保存在内存（JVM 堆）中，当 GC 压力变大时，会将部分状态溢出到磁盘。 状态后端检查点状态为文件系统的文件（因此是后端的名称）。
  */
 public class SpillableStateBackend extends AbstractStateBackend implements ConfigurableStateBackend {
 
@@ -90,6 +91,7 @@ public class SpillableStateBackend extends AbstractStateBackend implements Confi
 	private transient File[] initializedBasePaths;
 
 	public SpillableStateBackend(@Nullable String checkpointDataUri) throws IOException {
+		//根据是否存在ck数据的路径选择不同的底层实现StateBackend
 		this(checkpointDataUri == null ? new MemoryStateBackend() : new FsStateBackend(checkpointDataUri));
 	}
 

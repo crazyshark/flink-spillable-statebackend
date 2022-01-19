@@ -64,15 +64,26 @@ public abstract class SpillableStateTable<K, N, S> extends StateTable<K, N, S> i
 
 	/**
 	 * Meta of a {@link StateMap}.
+	 * 这个方法主要描述了在状态表中的一个 KeyGroup 所保存的所有状态的元数据信息，
+	 * 称为一个 StateMap。 在 Flink 的状态系统中，分配的最小单元是 KeyGroup，
+	 * 表示哈希值一致的一组 Key。若干个连续的 KeyGroup 组成一个 KeyGroupRange，分配给相关算子的某个并行实例中。
+	 * StateMapMeta 对象包括了这个 KeyGroup 所属对象的多种典型属性，
+	 * Flink Spillable Backend 就是根据这些属性来计算权重、决定 Spill 还是 Load 等动作的影响范围。
 	 */
 	public static class StateMapMeta {
 
+		// KeyGroup 所属的状态表引用
 		private final SpillableStateTable stateTable;
+		// 该状态表中, 此 KeyGroup 的偏移量 (索引)
 		private final int keyGroupIndex;
+		// 目前是否在堆内存里
 		private final boolean isOnHeap;
+		// 该 KeyGroup 的状态数
 		private final int size;
+		// 该 KeyGroup 的总请求数
 		private final long numRequests;
 		/** Initialize lazily. -1 indicates uninitialized. */
+		// 估计的状态总大小, 如果是 -1 表示未初始化
 		private long estimatedMemorySize;
 
 		public StateMapMeta(
